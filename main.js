@@ -46,3 +46,4 @@ defineClass('JSPatchFixVersion', {}, {
         return "123";
     }
 });
+
