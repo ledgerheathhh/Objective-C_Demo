@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UIWebView 与 H5 交互</title>
+<!--    <script src="https://raw.githubusercontent.com/marcuswestin/WebViewJavascriptBridge/master/WebViewJavascriptBridge.js"></script>-->
+    <script>
+        // 初始化 WebViewJavascriptBridge
+        function setupWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+            if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+            window.WVJBCallbacks = [callback];
+            var WVJBIframe = document.createElement('iframe');
+            WVJBIframe.style.display = 'none';
+            WVJBIframe.src = 'wvjbscheme://__BRIDGE_LOADED__';
+            document.documentElement.appendChild(WVJBIframe);
+            setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0);
+        }
+
+        setupWebViewJavascriptBridge(function(bridge) {
+            // 注册一个从 Objective-C 接收消息的方法
+            bridge.registerHandler('showMessage', function(data, responseCallback) {
+                alert('收到来自 OC 的消息: ' + data.message);
+                responseCallback('收到消息');
+            });
+
+            // 发送消息到 Objective-C
+            document.getElementById('sendMessageButton').onclick = function() {
+                bridge.callHandler('sendMessageToOC', {'message': 'Hello from H5!'}, function responseCallback(responseData) {
+                    alert('收到来自 OC 的响应: ' + responseData);
+                });
+            };
+        });
+    </script>
+</head>
+<body>
+    <h1>Hello, Objective-C!</h1>
+    <button id="sendMessageButton">点击我发送消息</button>
+</body>
+</html>
+

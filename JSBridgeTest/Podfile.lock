@@ -1,0 +1,22 @@
+PODS:
+  - LookinServer (1.2.8):
+    - LookinServer/Core (= 1.2.8)
+  - LookinServer/Core (1.2.8)
+  - WebViewJavascriptBridge (6.0.3)
+
+DEPENDENCIES:
+  - LookinServer
+  - WebViewJavascriptBridge
+
+SPEC REPOS:
+  trunk:
+    - LookinServer
+    - WebViewJavascriptBridge
+
+SPEC CHECKSUMS:
+  LookinServer: 1b2b61c6402ae29fa22182d48f5cd067b4e99e80
+  WebViewJavascriptBridge: 7f5bc4d3581e672e8f32bd0f812d54bc69bb8e29
+
+PODFILE CHECKSUM: 5a2ae0e410e4d77802aa0b7cc8c659011a1d9cbd
+
+COCOAPODS: 1.15.2
