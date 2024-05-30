@@ -1,0 +1,6 @@
+framework module UIdemo {
+  umbrella header "UIdemo-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,25 @@
+PODS:
+  - LookinServer (1.2.8):
+    - LookinServer/Core (= 1.2.8)
+  - LookinServer/Core (1.2.8)
+  - UIdemo (0.1.0)
+
+DEPENDENCIES:
+  - LookinServer
+  - UIdemo (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - LookinServer
+
+EXTERNAL SOURCES:
+  UIdemo:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  LookinServer: 1b2b61c6402ae29fa22182d48f5cd067b4e99e80
+  UIdemo: d55c5b4c41675d4b305457e725cf8ec343a44403
+
+PODFILE CHECKSUM: 7458d924dba00b203fdf4a1a8ce399b71242c712
+
+COCOAPODS: 1.15.2
