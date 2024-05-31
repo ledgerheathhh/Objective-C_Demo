@@ -10,7 +10,7 @@
 
 @interface ViewController ()
 
-@property (nonatomic, strong) UIWebView *webView;
+@property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) WebViewJavascriptBridge *bridge;
 @end
 
@@ -41,13 +41,13 @@
     
     // 创建并初始化 UIWebView，设置其大小和位置
     CGRect webViewFrame = CGRectMake(0, halfHeight, self.view.bounds.size.width, halfHeight);
-    self.webView = [[UIWebView alloc] initWithFrame:webViewFrame];
+//    self.webView = [[UIWebView alloc] initWithFrame:webViewFrame];
 //    self.webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
-    self.webView.delegate = self;
+//    self.webView.delegate = self;
     
     // 初始化并添加 WKWebView
-//    self.webView = [[WKWebView alloc] initWithFrame:self.view.bounds];
-//    self.webView.navigationDelegate = self;
+    self.webView = [[WKWebView alloc] initWithFrame:webViewFrame];
+    self.webView.navigationDelegate = self;
     
     [self.view addSubview:self.webView];
     
