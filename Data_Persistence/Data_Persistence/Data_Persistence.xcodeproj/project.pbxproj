@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		797B86B82C0EF05000D89888 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B86B72C0EF05000D89888 /* main.m */; };
+		797B86C02C0F190300D89888 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 797B86BF2C0F190300D89888 /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		797B86B42C0EF05000D89888 /* Data_Persistence */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Data_Persistence; sourceTree = BUILT_PRODUCTS_DIR; };
 		797B86B72C0EF05000D89888 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		797B86BF2C0F190300D89888 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				797B86C02C0F190300D89888 /* libsqlite3.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +46,7 @@
 			children = (
 				797B86B62C0EF05000D89888 /* Data_Persistence */,
 				797B86B52C0EF05000D89888 /* Products */,
+				797B86BE2C0F190200D89888 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +64,14 @@
 				797B86B72C0EF05000D89888 /* main.m */,
 			);
 			path = Data_Persistence;
+			sourceTree = "<group>";
+		};
+		797B86BE2C0F190200D89888 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				797B86BF2C0F190300D89888 /* libsqlite3.tbd */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
