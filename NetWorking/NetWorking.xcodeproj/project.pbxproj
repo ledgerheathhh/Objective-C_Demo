@@ -15,6 +15,8 @@
 		797B86772C0D8C3A00D89888 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 797B86762C0D8C3A00D89888 /* Assets.xcassets */; };
 		797B867A2C0D8C3A00D89888 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 797B86792C0D8C3A00D89888 /* Base */; };
 		797B867D2C0D8C3A00D89888 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B867C2C0D8C3A00D89888 /* main.m */; };
+		797B86C62C1046DD00D89888 /* YTKGetApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B86C52C1046DD00D89888 /* YTKGetApi.m */; };
+		797B86C92C1055DD00D89888 /* YTKPostApi.m in Sources */ = {isa = PBXBuildFile; fileRef = 797B86C82C1055DD00D89888 /* YTKPostApi.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,10 @@
 		797B86792C0D8C3A00D89888 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		797B867B2C0D8C3A00D89888 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		797B867C2C0D8C3A00D89888 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		797B86C42C1046DD00D89888 /* YTKGetApi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YTKGetApi.h; sourceTree = "<group>"; };
+		797B86C52C1046DD00D89888 /* YTKGetApi.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YTKGetApi.m; sourceTree = "<group>"; };
+		797B86C72C1055DD00D89888 /* YTKPostApi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YTKPostApi.h; sourceTree = "<group>"; };
+		797B86C82C1055DD00D89888 /* YTKPostApi.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YTKPostApi.m; sourceTree = "<group>"; };
 		91BA145465DB644830A6D4E8 /* Pods-NetWorking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetWorking.release.xcconfig"; path = "Target Support Files/Pods-NetWorking/Pods-NetWorking.release.xcconfig"; sourceTree = "<group>"; };
 		BE104AD8DE2A51C3247C7342 /* Pods-NetWorking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetWorking.debug.xcconfig"; path = "Target Support Files/Pods-NetWorking/Pods-NetWorking.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -78,6 +84,10 @@
 			children = (
 				797B866A2C0D8C3800D89888 /* AppDelegate.h */,
 				797B866B2C0D8C3800D89888 /* AppDelegate.m */,
+				797B86C72C1055DD00D89888 /* YTKPostApi.h */,
+				797B86C82C1055DD00D89888 /* YTKPostApi.m */,
+				797B86C42C1046DD00D89888 /* YTKGetApi.h */,
+				797B86C52C1046DD00D89888 /* YTKGetApi.m */,
 				797B866D2C0D8C3800D89888 /* SceneDelegate.h */,
 				797B866E2C0D8C3800D89888 /* SceneDelegate.m */,
 				797B86702C0D8C3800D89888 /* ViewController.h */,
@@ -214,10 +224,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				797B86C62C1046DD00D89888 /* YTKGetApi.m in Sources */,
 				797B86722C0D8C3800D89888 /* ViewController.m in Sources */,
 				797B866C2C0D8C3800D89888 /* AppDelegate.m in Sources */,
 				797B867D2C0D8C3A00D89888 /* main.m in Sources */,
 				797B866F2C0D8C3800D89888 /* SceneDelegate.m in Sources */,
+				797B86C92C1055DD00D89888 /* YTKPostApi.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

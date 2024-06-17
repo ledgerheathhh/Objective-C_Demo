@@ -7,6 +7,10 @@
 
 #import "ViewController.h"
 #import "AFNetworking.h"
+#import "YTKNetwork.h"
+#import "YTKGetApi.h"
+#import "YTKPostApi.h"
+
 
 @interface ViewController ()
 
@@ -21,20 +25,12 @@
     
 //    [self sendPostRequest];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    [self AFMethod];
+
+//    [self YTKget];
+
+    [self YTKpost];
     
-    [manager GET:@"https://jsonplaceholder.typicode.com/todos/1"
-      parameters:nil
-         headers:nil
-        progress:nil
-         success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-             NSLog(@"JSON: %@", responseObject);
-         }
-         failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-             NSLog(@"Error: %@", error);
-         }];
-
-
 }
 
 - (void)fetchDataFromAPI {
@@ -124,6 +120,51 @@
     
     // 启动任务
     [dataTask resume];
+}
+
+-(void) AFMethod {
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    [manager GET:@"https://jsonplaceholder.typicode.com/todos/1"
+        parameters:nil
+         headers:nil
+        progress:nil
+         success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+             NSLog(@"JSON: %@", responseObject);
+         }
+         failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+             NSLog(@"Error: %@", error);
+         }];
+}
+
+-(void) YTKget {
+    YTKGetApi *api = [[YTKGetApi alloc] init];
+    [api startWithCompletionBlockWithSuccess:^(YTKBaseRequest *request) {
+        // 处理成功响应
+        NSLog(@"User Info: %@", request.responseJSONObject);
+        NSLog(@"Url:%@", request.requestUrl);
+        NSLog(@"requestMethod:%ld", (long)request.requestMethod);
+    } failure:^(YTKBaseRequest *request) {
+        // 处理失败响应
+        NSLog(@"Failed: %@", request.error);
+        NSLog(@"Url:%@", request.requestUrl);
+    }];
+
+}
+
+-(void) YTKpost {
+    YTKPostApi *api = [[YTKPostApi alloc] initWithUserId:@2333 body:@"woo" title:@"aloha"];
+    [api startWithCompletionBlockWithSuccess:^(YTKBaseRequest *request) {
+        // 处理成功响应
+        NSLog(@"User Info: %@", request.responseJSONObject);
+        NSLog(@"Url:%@", request.requestUrl);
+        NSLog(@"requestMethod:%ld", (long)request.requestMethod);
+    } failure:^(YTKBaseRequest *request) {
+        // 处理失败响应
+        NSLog(@"Failed: %@", request.error);
+        NSLog(@"Url:%@", request.requestUrl);
+    }];
+
 }
 
 @end

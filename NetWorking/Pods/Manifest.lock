@@ -14,17 +14,22 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - YTKNetwork (3.0.6):
+    - AFNetworking/NSURLSession (~> 4.0)
 
 DEPENDENCIES:
   - AFNetworking (~> 4.0)
+  - YTKNetwork
 
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - YTKNetwork
 
 SPEC CHECKSUMS:
   AFNetworking: 3bd23d814e976cd148d7d44c3ab78017b744cd58
+  YTKNetwork: c16be90b06be003de9e9cd0d3b187cc8eaf35c04
 
-PODFILE CHECKSUM: d6da15c52ff56e63a5bc8db7480c0b793c36eb6b
+PODFILE CHECKSUM: 0c5a2fd7e6fab154f4c28e28bda19f2f5442e18b
 
 COCOAPODS: 1.15.2

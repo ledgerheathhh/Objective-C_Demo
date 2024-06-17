@@ -9,6 +9,7 @@
 #import "CViewController.h"
 
 @interface CViewController ()<UICollectionViewDataSource>
+
 @property(nonatomic,strong)UICollectionView *collectionView;
 
 @end
@@ -41,6 +42,7 @@
         flowLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
         flowLayout.itemSize = CGSizeMake(50, 50);
         _collectionView.dataSource = self;
+        _collectionView.delegate = self;
         _collectionView.backgroundColor = [UIColor whiteColor];
     }
     return _collectionView;

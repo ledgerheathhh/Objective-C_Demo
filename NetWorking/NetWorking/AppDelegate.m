@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "YTKNetwork.h"
 
 @interface AppDelegate ()
 
@@ -16,6 +17,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    YTKNetworkConfig *config = [YTKNetworkConfig sharedConfig];
+    config.baseUrl = @"https://jsonplaceholder.typicode.com";
+    config.cdnUrl = @"";
     return YES;
 }
 

@@ -9,6 +9,7 @@
 #import "UAppDelegate.h"
 #import "UViewController.h"
 #import "CViewController.h"
+#import "MViewController.h"
 
 @implementation UAppDelegate
 
@@ -18,19 +19,25 @@
     
     UIViewController *homeVC = [[UViewController alloc] init];;
     homeVC.title = @"table";
-    UINavigationController *homeNaviVC = [[UINavigationController alloc] initWithRootViewController:homeVC];
+    UINavigationController *NaviVC1 = [[UINavigationController alloc] initWithRootViewController:homeVC];
     UITabBarItem *item0 = [[UITabBarItem alloc] initWithTitle:homeVC.title image:[UIImage imageNamed:@"img1"] selectedImage:[UIImage imageNamed:@"img2"]];
-    homeNaviVC.tabBarItem = item0;
+    NaviVC1.tabBarItem = item0;
     
     UIViewController *contactVC = [[CViewController alloc] init];
     contactVC.title = @"collection";
-    UINavigationController *contactNaviVC = [[UINavigationController alloc] initWithRootViewController:contactVC];
+    UINavigationController *NaviVC2 = [[UINavigationController alloc] initWithRootViewController:contactVC];
     UITabBarItem *item1 = [[UITabBarItem alloc] initWithTitle:contactVC.title image:[UIImage imageNamed:@"img3"] selectedImage:[UIImage imageNamed:@"img4"]];
-    contactNaviVC.tabBarItem = item1;
+    NaviVC2.tabBarItem = item1;
+    
+    UIViewController *VC = [[MViewController alloc] init];
+    VC.title = @"layout";
+    UINavigationController *NaviVC3 = [[UINavigationController alloc] initWithRootViewController:VC];
+    UITabBarItem *item2 = [[UITabBarItem alloc] initWithTitle:VC.title image:[UIImage imageNamed:@"img1"] selectedImage:[UIImage imageNamed:@"img2"]];
+    NaviVC3.tabBarItem = item2;
     
     UITabBarController *tabBarVC = [[UITabBarController alloc] init];
-    tabBarVC.viewControllers = @[homeNaviVC, contactNaviVC];
-    tabBarVC.selectedViewController = homeNaviVC;
+    tabBarVC.viewControllers = @[NaviVC1, NaviVC2,NaviVC3];
+    tabBarVC.selectedViewController = NaviVC1;
     
 //    tabBarVC.tabBar.backgroundImage = [UIImage imageNamed:@"image"];
     //设置选中时文字颜色
