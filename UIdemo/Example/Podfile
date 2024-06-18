@@ -5,7 +5,7 @@ platform :ios, '10.0'
 target 'UIdemo_Example' do
   
   pod 'UIdemo', :path => '../'
-  pod 'LookinServer', :configurations => ['Debug']
+#  pod 'LookinServer', :configurations => ['Debug']
   pod 'Masonry'
   pod 'WebViewJavascriptBridge'
   

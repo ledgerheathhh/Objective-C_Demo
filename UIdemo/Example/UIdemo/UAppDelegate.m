@@ -10,12 +10,32 @@
 #import "UViewController.h"
 #import "CViewController.h"
 #import "MViewController.h"
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 
 @implementation UAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+
+    // 创建一个 CTTelephonyNetworkInfo 实例
+    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+    
+    // 获取当前的 CTCarrier 对象
+    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+    
+    // 打印运营商信息
+    if (carrier != nil) {
+        NSLog(@"Carrier Name: %@", [carrier carrierName] ?: @"Unknown");
+        NSLog(@"Mobile Country Code (MCC): %@", [carrier mobileCountryCode] ?: @"Unknown");
+        NSLog(@"Mobile Network Code (MNC): %@", [carrier mobileNetworkCode] ?: @"Unknown");
+        NSLog(@"ISO Country Code: %@", [carrier isoCountryCode] ?: @"Unknown");
+        NSLog(@"Allows VOIP: %@", [carrier allowsVOIP] ? @"YES" : @"NO");
+    } else {
+        NSLog(@"Carrier information is not available.");
+    }
+
     
     UIViewController *homeVC = [[UViewController alloc] init];;
     homeVC.title = @"table";

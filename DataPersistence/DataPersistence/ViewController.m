@@ -8,6 +8,7 @@
 #import "ViewController.h"
 #import "sqlite3.h"
 #import "MMKV.h"
+#import "FMDB.h"
 
 @interface ViewController ()
 
@@ -26,7 +27,7 @@
     
 //    [self MMKVmethod];
 
-    
+    [self FMDBfunc];
 }
 
 -(void) Plistmethod {
@@ -171,5 +172,27 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 //    [mmkv clearAll];
 }
 
+-(void) FMDBfunc {
+    // 获取数据库文件路径
+    NSString *docsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    NSString *dbPath = [docsPath stringByAppendingPathComponent:@"FMDB_example.db"];
+
+    // 创建数据库实例
+    FMDatabase *database = [FMDatabase databaseWithPath:dbPath];
+
+    // 打开数据库
+    if (![database open]) {
+        NSLog(@"Could not open database");
+        return;
+    }
+    
+    //创建表
+    NSString *createTableSQL = @"CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, age INTEGER)";
+    if (![database executeUpdate:createTableSQL]) {
+        NSLog(@"Failed to create table: %@", [database lastErrorMessage]);
+    }
+    
+    
+}
 
 @end

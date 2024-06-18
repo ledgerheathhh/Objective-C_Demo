@@ -1,20 +1,15 @@
 PODS:
-  - LookinServer (1.2.8):
-    - LookinServer/Core (= 1.2.8)
-  - LookinServer/Core (1.2.8)
   - Masonry (1.1.0)
   - UIdemo (0.1.0)
   - WebViewJavascriptBridge (6.0.3)
 
 DEPENDENCIES:
-  - LookinServer
   - Masonry
   - UIdemo (from `../`)
   - WebViewJavascriptBridge
 
 SPEC REPOS:
   trunk:
-    - LookinServer
     - Masonry
     - WebViewJavascriptBridge
 
@@ -23,11 +18,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  LookinServer: 1b2b61c6402ae29fa22182d48f5cd067b4e99e80
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   UIdemo: d55c5b4c41675d4b305457e725cf8ec343a44403
   WebViewJavascriptBridge: 7f5bc4d3581e672e8f32bd0f812d54bc69bb8e29
 
-PODFILE CHECKSUM: b49de9da88f5db2965b12d77100b4e261a81470c
+PODFILE CHECKSUM: a7b38ee832c40d955b9f30cd40f6791da0b0036b
 
 COCOAPODS: 1.15.2

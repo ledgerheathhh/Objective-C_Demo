@@ -20,6 +20,7 @@
     // 创建一个按钮
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:@"Press Me" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(showAlert) forControlEvents:UIControlEventTouchUpInside];
     
     // 设置按钮的文字颜色
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal]; // 正常状态下的字体颜色
@@ -88,5 +89,25 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
+}
+
+- (void)showAlert {
+    // 创建 UIAlertController 实例
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Title"
+                                                                   message:@"This is a message."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    // 添加 "确定" 操作
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK"
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *action) {
+        // 处理确定按钮点击事件
+        NSLog(@"OK button tapped.");
+    }];
+    
+    [alert addAction:okAction];
+    
+    // 显示 UIAlertController
+    [self presentViewController:alert animated:YES completion:nil];
 }
 @end
