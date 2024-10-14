@@ -19,21 +19,32 @@
 {
     // Override point for customization after application launch.
 
-    // 创建一个 CTTelephonyNetworkInfo 实例
+//    // 创建一个 CTTelephonyNetworkInfo 实例
+//    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+//    
+//    // 获取当前的 CTCarrier 对象
+//    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+//    
+//    // 打印运营商信息
+//    if (carrier != nil) {
+//        NSLog(@"Carrier Name: %@", [carrier carrierName] ?: @"Unknown");
+//        NSLog(@"Mobile Country Code (MCC): %@", [carrier mobileCountryCode] ?: @"Unknown");
+//        NSLog(@"Mobile Network Code (MNC): %@", [carrier mobileNetworkCode] ?: @"Unknown");
+//        NSLog(@"ISO Country Code: %@", [carrier isoCountryCode] ?: @"Unknown");
+//        NSLog(@"Allows VOIP: %@", [carrier allowsVOIP] ? @"YES" : @"NO");
+//    } else {
+//        NSLog(@"Carrier information is not available.");
+//    }
+    
     CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
-    
-    // 获取当前的 CTCarrier 对象
-    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
-    
-    // 打印运营商信息
-    if (carrier != nil) {
-        NSLog(@"Carrier Name: %@", [carrier carrierName] ?: @"Unknown");
-        NSLog(@"Mobile Country Code (MCC): %@", [carrier mobileCountryCode] ?: @"Unknown");
-        NSLog(@"Mobile Network Code (MNC): %@", [carrier mobileNetworkCode] ?: @"Unknown");
-        NSLog(@"ISO Country Code: %@", [carrier isoCountryCode] ?: @"Unknown");
-        NSLog(@"Allows VOIP: %@", [carrier allowsVOIP] ? @"YES" : @"NO");
-    } else {
-        NSLog(@"Carrier information is not available.");
+
+    // 检索所有可用的蜂窝服务
+    NSDictionary<NSString *, CTCarrier *> *carriers = networkInfo.serviceSubscriberCellularProviders;
+
+    for (NSString *identifier in carriers) {
+        CTCarrier *carrier = carriers[identifier];
+        NSLog(@"Carrier for %@: %@", identifier, carrier.carrierName);
+        // 你可以访问carrier.carrierName, carrier.mobileCountryCode, carrier.mobileNetworkCode, carrier.isoCountryCode等属性
     }
 
     

@@ -8,7 +8,7 @@
 
 #import "CViewController.h"
 
-@interface CViewController ()<UICollectionViewDataSource>
+@interface CViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
 
 @property(nonatomic,strong)UICollectionView *collectionView;
 

@@ -8,7 +8,7 @@
 #import "WVJBViewController.h"
 #import <WebViewJavascriptBridge/WebViewJavascriptBridge.h>
 
-@interface WVJBViewController ()
+@interface WVJBViewController ()<WKNavigationDelegate>
 
 @property (nonatomic, strong) WKWebView *webView;
 @property (nonatomic, strong) WebViewJavascriptBridge *bridge;

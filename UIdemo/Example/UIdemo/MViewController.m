@@ -17,6 +17,40 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    // 创建一个视图
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+    view.backgroundColor = [UIColor blueColor];
+    [self.view addSubview:view];
+    
+    // 获取视图的图层
+    CALayer *layer = view.layer;
+    
+    // 设置圆角
+    layer.cornerRadius = 20.0;
+    
+    // 设置边框
+    layer.borderWidth = 5.0;
+    layer.borderColor = [UIColor whiteColor].CGColor;
+    
+    // 设置阴影
+    layer.shadowColor = [UIColor blackColor].CGColor;
+    layer.shadowOffset = CGSizeMake(5, 5);
+    layer.shadowOpacity = 0.7;
+    layer.shadowRadius = 10.0;
+    
+    // 创建基本动画
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
+    animation.fromValue = [NSValue valueWithCGPoint:layer.position];
+    animation.toValue = [NSValue valueWithCGPoint:CGPointMake(400, 100)];
+    animation.duration = 2.0;
+    
+    // 更新图层的位置
+    layer.position = CGPointMake(400, 100);
+    
+    // 添加动画到图层
+    [layer addAnimation:animation forKey:@"positionAnimation"];
+    
     // 创建一个按钮
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:@"Press Me" forState:UIControlStateNormal];
