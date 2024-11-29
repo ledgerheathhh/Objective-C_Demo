@@ -8,6 +8,7 @@ target 'UIdemo_Example' do
 #  pod 'LookinServer', :configurations => ['Debug']
   pod 'Masonry'
   pod 'WebViewJavascriptBridge'
+  pod 'GCDWebServer'
   
   target 'UIdemo_Tests' do
     inherit! :search_paths
