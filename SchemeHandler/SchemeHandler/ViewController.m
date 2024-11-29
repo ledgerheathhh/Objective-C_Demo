@@ -6,8 +6,11 @@
 //
 
 #import "ViewController.h"
+#import "WebKit/WebKit.h"
 
 @interface ViewController ()
+
+@property WKWebView* webview;
 
 @end
 
