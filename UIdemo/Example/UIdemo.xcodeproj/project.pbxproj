@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -24,6 +24,7 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		790C570E2C1BE23F008495D9 /* WVJBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 790C570D2C1BE23F008495D9 /* WVJBViewController.m */; };
 		797FE96C2C04871E00EF2BD7 /* CViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 797FE96B2C04871E00EF2BD7 /* CViewController.m */; };
+		79C834022DA4CEA7008BFD33 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79C834012DA4CEA7008BFD33 /* ViewController.m */; };
 		79CCBAA52C12E4FE00C9C005 /* MViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 79CCBAA42C12E4FE00C9C005 /* MViewController.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		A7E4E882BA86A48DD16F42A3 /* Pods_UIdemo_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62530DDA2E18E418B80931B3 /* Pods_UIdemo_Example.framework */; };
@@ -67,6 +68,8 @@
 		790C570D2C1BE23F008495D9 /* WVJBViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WVJBViewController.m; sourceTree = "<group>"; };
 		797FE96A2C04871E00EF2BD7 /* CViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CViewController.h; sourceTree = "<group>"; };
 		797FE96B2C04871E00EF2BD7 /* CViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CViewController.m; sourceTree = "<group>"; };
+		79C834002DA4CEA7008BFD33 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		79C834012DA4CEA7008BFD33 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		79CCBAA32C12E4FE00C9C005 /* MViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MViewController.h; sourceTree = "<group>"; };
 		79CCBAA42C12E4FE00C9C005 /* MViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MViewController.m; sourceTree = "<group>"; };
 		7B6795D032A52631E29E8581 /* Pods-UIdemo_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIdemo_Example.debug.xcconfig"; path = "Target Support Files/Pods-UIdemo_Example/Pods-UIdemo_Example.debug.xcconfig"; sourceTree = "<group>"; };
@@ -77,6 +80,10 @@
 		B71A1E2DF3FE50333C5405D5 /* Pods-UIdemo_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIdemo_Tests.release.xcconfig"; path = "Target Support Files/Pods-UIdemo_Tests/Pods-UIdemo_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		FE2E0BF46295040F468EEEF0 /* Pods-UIdemo_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UIdemo_Example.release.xcconfig"; path = "Target Support Files/Pods-UIdemo_Example/Pods-UIdemo_Example.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		79C833FC2DA4CE58008BFD33 /* PagedGridMenuView */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PagedGridMenuView; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		6003F587195388D20070C39A /* Frameworks */ = {
@@ -141,6 +148,8 @@
 		6003F593195388D20070C39A /* Example for UIdemo */ = {
 			isa = PBXGroup;
 			children = (
+				79C834002DA4CEA7008BFD33 /* ViewController.h */,
+				79C834012DA4CEA7008BFD33 /* ViewController.m */,
 				6003F59C195388D20070C39A /* UAppDelegate.h */,
 				6003F59D195388D20070C39A /* UAppDelegate.m */,
 				6003F5A5195388D20070C39A /* UViewController.h */,
@@ -155,6 +164,7 @@
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
+				79C833FC2DA4CE58008BFD33 /* PagedGridMenuView */,
 			);
 			name = "Example for UIdemo";
 			path = UIdemo;
@@ -227,6 +237,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				79C833FC2DA4CE58008BFD33 /* PagedGridMenuView */,
 			);
 			name = UIdemo_Example;
 			productName = UIdemo;
@@ -392,6 +405,7 @@
 			files = (
 				6003F59E195388D20070C39A /* UAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* UViewController.m in Sources */,
+				79C834022DA4CEA7008BFD33 /* ViewController.m in Sources */,
 				797FE96C2C04871E00EF2BD7 /* CViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				79CCBAA52C12E4FE00C9C005 /* MViewController.m in Sources */,

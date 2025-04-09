@@ -1,0 +1,6 @@
+framework module Pods_PagedGridMenu {
+  umbrella header "Pods-PagedGridMenu-umbrella.h"
+
+  export *
+  module * { export * }
+}

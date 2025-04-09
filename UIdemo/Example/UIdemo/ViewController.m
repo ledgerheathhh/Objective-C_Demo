@@ -25,7 +25,7 @@
 
     // 1. 创建菜单数据 (示例)
     // 传入不同数量测试效果 (例如 3, 7, 12)
-    self.menuItems = [self createSampleMenuItems:9];
+    self.menuItems = [self createSampleMenuItems:12];
 
     // 2. 创建菜单视图实例
     self.menuView = [[PagedGridMenuView alloc] initWithFrame:CGRectZero]; // 初始 frame 不重要
