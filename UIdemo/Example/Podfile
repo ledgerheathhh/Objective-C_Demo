@@ -9,6 +9,7 @@ target 'UIdemo_Example' do
   pod 'Masonry'
   pod 'WebViewJavascriptBridge'
   pod 'GCDWebServer'
+  pod 'MarkdownKit'
   
   target 'UIdemo_Tests' do
     inherit! :search_paths

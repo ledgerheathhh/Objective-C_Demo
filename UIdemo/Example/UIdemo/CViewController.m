@@ -19,8 +19,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self.view addSubview:self.collectionView];
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+    UITextView *textView = [UITextView new];
+    textView.backgroundColor = UIColor.lightGrayColor;
+    textView.text = @"1233455";
+    [self.view addSubview:textView];
+    [textView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    // 设置圆角
+    textView.layer.cornerRadius = 10;  // 圆角半径为 10
+    textView.layer.masksToBounds = YES;  // 确保子视图的内容也会在圆角范围内裁剪
+
+    // 设置约束来居中
+    [NSLayoutConstraint activateConstraints:@[
+        [textView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [textView.centerYAnchor constraintEqualToAnchor:self.view.centerYAnchor],
+        
+        // 设置宽度和高度约束
+        [textView.widthAnchor constraintEqualToConstant:400],
+        [textView.heightAnchor constraintEqualToConstant:200]
+    ]];
+//    [self.view addSubview:self.collectionView];
+//    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
 }
 
 /*

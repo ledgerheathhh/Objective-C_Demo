@@ -2,12 +2,14 @@ PODS:
   - GCDWebServer (3.5.4):
     - GCDWebServer/Core (= 3.5.4)
   - GCDWebServer/Core (3.5.4)
+  - MarkdownKit (1.7.1)
   - Masonry (1.1.0)
   - UIdemo (0.1.0)
   - WebViewJavascriptBridge (6.0.3)
 
 DEPENDENCIES:
   - GCDWebServer
+  - MarkdownKit
   - Masonry
   - UIdemo (from `../`)
   - WebViewJavascriptBridge
@@ -15,6 +17,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - GCDWebServer
+    - MarkdownKit
     - Masonry
     - WebViewJavascriptBridge
 
@@ -24,10 +27,11 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
+  MarkdownKit: 0b15195c63cf3e39387949c4bdeccde0055e252a
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   UIdemo: d55c5b4c41675d4b305457e725cf8ec343a44403
   WebViewJavascriptBridge: 7f5bc4d3581e672e8f32bd0f812d54bc69bb8e29
 
-PODFILE CHECKSUM: 5297f5f0a63daf7f87a37ec6fe0f528903e2f3fc
+PODFILE CHECKSUM: 61d8d06a3dfe37a9e676f48b24cf055367f8ebab
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
