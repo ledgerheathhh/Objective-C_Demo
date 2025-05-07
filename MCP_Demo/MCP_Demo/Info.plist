@@ -21,5 +21,12 @@
 			</array>
 		</dict>
 	</dict>
+	<!-- 添加网络权限 -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>需要使用本地网络来启动MCP服务器</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_mcp._tcp</string>
+	</array>
 </dict>
 </plist>

@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MCPServerManager.h"
 
 @interface AppDelegate ()
 
@@ -36,5 +37,9 @@
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 }
 
+- (void)applicationWillTerminate:(UIApplication *)application {
+    // 确保在应用终止时停止MCP服务器
+    [[MCPServerManager sharedInstance] stopServer];
+}
 
 @end
