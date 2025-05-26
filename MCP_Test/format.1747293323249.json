@@ -1,0 +1,39 @@
+{
+    "data": [
+        {
+            "files": [
+
+            ],
+            "text": "从互联网上获取这个网址的内容并转换成Markdown格式：https://www.example.com"
+        },
+        {
+            "sys_prompt": "You are a helpful assistant.",
+            "model": "Qwen/Qwen3-235B-A22B"
+        },
+        "{
+    "mcpServers": {
+        "fetch": {
+            "type": "sse",
+            "url": "https://mcp-65129b34-aacd-4267.api-inference.modelscope.cn/sse"
+        }
+    }
+}",
+        null,
+        [
+
+        ],
+        null
+    ],
+    "event_data": null,
+    "fn_index": 22,
+    "trigger_id": 29,
+    "dataType": [
+        "modelscopepromultimodalinput",
+        "antdform",
+        "code",
+        "state",
+        "modelscopeprochatbot",
+        "state"
+    ],
+    "session_hash": "8cgc95zha5c"
+}
