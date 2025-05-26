@@ -1,6 +1,0 @@
-framework module Pods_MCP_Test {
-  umbrella header "Pods-MCP_Test-umbrella.h"
-
-  export *
-  module * { export * }
-}

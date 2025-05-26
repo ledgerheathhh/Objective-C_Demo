@@ -9,8 +9,8 @@
 
 @interface ViewController : UIViewController
 
-@property (nonatomic, strong) UILabel *statusLabel;
-@property (nonatomic, strong) UIButton *testButton;
+@property (nonatomic, strong) UITextField *inputTextField;
+@property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong) UITextView *outputTextView;
 
 @end
-

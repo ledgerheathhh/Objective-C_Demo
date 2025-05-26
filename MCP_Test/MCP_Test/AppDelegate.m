@@ -6,7 +6,6 @@
 //
 
 #import "AppDelegate.h"
-#import "MCPServer.h"
 
 @interface AppDelegate ()
 
@@ -17,13 +16,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
-    // 启动MCP Server
-    #ifdef DEBUG
-    [[MCPServer sharedServer] startServer];
-    NSLog(@"MCP Server URL: %@", [[MCPServer sharedServer] serverURL]);
-    #endif
-    
     return YES;
 }
 
