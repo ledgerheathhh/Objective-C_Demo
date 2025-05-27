@@ -6,10 +6,12 @@
 //
 
 #import "ViewController.h"
+#import "APIService.h"
+#import "LocalToolManager.h"
+#import "ModelContext.h"
 
-// 假设的 API Endpoint 和 API Key (请替换为实际值)
 #define API_ENDPOINT_URL @"https://api-inference.modelscope.cn/v1/chat/completions"
-#define API_KEY @"xxx"
+#define API_KEY @""
 
 @implementation ViewController
 
@@ -65,18 +67,35 @@
     // 或者其他认证方式，如 API Key in header:
     // [request setValue:API_KEY forHTTPHeaderField:@"X-API-Key"];
 
+    NSString *system_message = @""
+        "You are a helpful assistant with access to these tools:\n\n"
+//        "f"{tools_description}\n"
+        "Choose the appropriate tool based on the user's question. "
+        "If no tool is needed, reply directly.\n\n"
+        "IMPORTANT: When you need to use a tool, you must ONLY respond with "
+        "the exact JSON object format below, nothing else:\n"
+        "{\n"
+        "    \"tool\": \"tool-name\",\n"
+        "    \"arguments\": {\n"
+        "        \"argument-name\": \"value\"\n"
+        "    }\n"
+        "}\n\n"
+        "After receiving a tool's response:\n"
+        "1. Transform the raw data into a natural, conversational response\n"
+        "2. Keep responses concise but informative\n"
+        "3. Focus on the most relevant information\n"
+        "4. Use appropriate context from the user's question\n"
+        "5. Avoid simply repeating the raw data\n\n"
+        "Please use only the tools that are explicitly defined above.";
 
     // --- 构建请求体 (根据具体 API 要求调整) ---
     // 这是一个假设的请求体结构，实际结构取决于你使用的 LLM API
     NSDictionary *requestBodyDict = @{
-        @"prompt": prompt,
-        @"max_tokens": @150,
+        @"max_tokens": @10000,
         @"model": @"deepseek-ai/DeepSeek-R1",
-        @"messages":@[@{
-                        @"role":@"user",
-                        @"content":prompt
-        }]
-        // 可能还有其他参数，如 model, temperature, etc.
+        @"stream": @NO,
+        @"messages":@[ @{ @"role": @"system", @"content": system_message},
+                       @{ @"role": @"user", @"content": prompt} ]
     };
 
     NSError *jsonError;
