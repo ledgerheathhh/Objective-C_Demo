@@ -6,11 +6,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MCPClient.h"
+#import "ToolManager.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController <MCPClientDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UIButton *testButton;
-@property (weak, nonatomic) IBOutlet UILabel *resultLabel;
+@property (nonatomic, strong) MCPClient *mcpClient;
+@property (nonatomic, strong) ToolManager *toolManager;
+@property (nonatomic, strong) NSMutableArray<MessageModel *> *messages;
+
+@property (nonatomic, strong) UITableView *chatTableView;
+@property (nonatomic, strong) UITextField *inputTextField;
+@property (nonatomic, strong) UIButton *sendButton;
 
 @end
 

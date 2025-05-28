@@ -6,7 +6,6 @@
 //
 
 #import "AppDelegate.h"
-#import "MCPServerManager.h"
 
 @interface AppDelegate ()
 
@@ -38,8 +37,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-    // 确保在应用终止时停止MCP服务器
-    [[MCPServerManager sharedInstance] stopServer];
+    
 }
 
 @end

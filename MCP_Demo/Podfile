@@ -1,6 +1,0 @@
-platform :ios, '15.6'
-
-target 'MCP_Demo' do
-  # 添加MCP Swift SDK
-  pod 'mcp-swift-sdk', :git => 'https://github.com/gsabran/mcp-swift-sdk.git'
-end
