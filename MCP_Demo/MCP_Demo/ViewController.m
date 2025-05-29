@@ -7,6 +7,124 @@
 
 #import "ViewController.h"
 
+// 添加自定义消息单元格
+@interface MessageCell : UITableViewCell
+@property (nonatomic, strong) UIView *bubbleView;
+@property (nonatomic, strong) UILabel *messageLabel;
+@property (nonatomic, strong) NSLayoutConstraint *bubbleLeadingConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *bubbleTrailingConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *bubbleWidthConstraint;  // 添加宽度约束
+
+- (void)configureWithMessage:(MessageModel *)message;
+@end
+
+@implementation MessageCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = [UIColor clearColor];
+        
+        // 创建气泡视图
+        self.bubbleView = [[UIView alloc] init];
+        self.bubbleView.layer.cornerRadius = 12;
+        self.bubbleView.clipsToBounds = YES;
+        self.bubbleView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.contentView addSubview:self.bubbleView];
+        
+        // 创建消息标签
+        self.messageLabel = [[UILabel alloc] init];
+        self.messageLabel.numberOfLines = 0;
+        self.messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [self.bubbleView addSubview:self.messageLabel];
+        
+        // 设置气泡视图约束
+        self.bubbleLeadingConstraint = [self.bubbleView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:10];
+        self.bubbleTrailingConstraint = [self.bubbleView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-10];
+        
+        // 设置最大宽度约束（屏幕宽度的70%）
+        CGFloat maxWidth = UIScreen.mainScreen.bounds.size.width * 0.7;
+        self.bubbleWidthConstraint = [self.bubbleView.widthAnchor constraintLessThanOrEqualToConstant:maxWidth];
+        
+        [NSLayoutConstraint activateConstraints:@[
+            // 气泡视图约束
+            self.bubbleLeadingConstraint,
+            self.bubbleTrailingConstraint,
+            self.bubbleWidthConstraint,
+            [self.bubbleView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:10],
+            [self.bubbleView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-10],
+            
+            // 消息标签约束
+            [self.messageLabel.leadingAnchor constraintEqualToAnchor:self.bubbleView.leadingAnchor constant:10],
+            [self.messageLabel.trailingAnchor constraintEqualToAnchor:self.bubbleView.trailingAnchor constant:-10],
+            [self.messageLabel.topAnchor constraintEqualToAnchor:self.bubbleView.topAnchor constant:10],
+            [self.messageLabel.bottomAnchor constraintEqualToAnchor:self.bubbleView.bottomAnchor constant:-10]
+        ]];
+    }
+    return self;
+}
+
+- (void)configureWithMessage:(MessageModel *)message {
+    self.messageLabel.text = message.content;
+    
+    // 根据消息类型设置样式
+    if (message.type == MessageTypeUser) {
+        self.bubbleView.backgroundColor = [UIColor systemBlueColor];
+        self.messageLabel.textColor = [UIColor whiteColor];
+        
+        // 用户消息靠右
+        self.bubbleLeadingConstraint.active = NO;
+        self.bubbleTrailingConstraint.active = YES;
+        self.bubbleTrailingConstraint.constant = -10;
+        
+        // 设置最小宽度约束，确保短消息也有合适的宽度
+        CGFloat minWidth = MIN(UIScreen.mainScreen.bounds.size.width * 0.3, 100);
+        [self.bubbleView.widthAnchor constraintGreaterThanOrEqualToConstant:minWidth].active = YES;
+    } else {
+        self.bubbleView.backgroundColor = [UIColor systemGrayColor];
+        self.messageLabel.textColor = [UIColor whiteColor];
+        
+        // 助手消息靠左
+        self.bubbleTrailingConstraint.active = NO;
+        self.bubbleLeadingConstraint.active = YES;
+        self.bubbleLeadingConstraint.constant = 10;
+        
+        // 设置最小宽度约束，确保短消息也有合适的宽度
+        CGFloat minWidth = MIN(UIScreen.mainScreen.bounds.size.width * 0.3, 100);
+        [self.bubbleView.widthAnchor constraintGreaterThanOrEqualToConstant:minWidth].active = YES;
+    }
+    
+    // 强制布局更新以获取正确的文本大小
+    [self.messageLabel setNeedsLayout];
+    [self.messageLabel layoutIfNeeded];
+    
+    // 根据文本内容调整气泡宽度
+    CGSize textSize = [self.messageLabel.text boundingRectWithSize:CGSizeMake(UIScreen.mainScreen.bounds.size.width * 0.7 - 20, CGFLOAT_MAX)
+                                                         options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+                                                      attributes:@{NSFontAttributeName: self.messageLabel.font}
+                                                         context:nil].size;
+    
+    // 设置气泡宽度约束
+    CGFloat bubbleWidth = MIN(textSize.width + 20, UIScreen.mainScreen.bounds.size.width * 0.7);
+    self.bubbleWidthConstraint.constant = bubbleWidth;
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.messageLabel.text = nil;
+    self.bubbleView.backgroundColor = nil;
+    self.messageLabel.textColor = nil;
+    
+    // 重置约束
+    self.bubbleLeadingConstraint.active = YES;
+    self.bubbleTrailingConstraint.active = YES;
+    self.bubbleWidthConstraint.constant = UIScreen.mainScreen.bounds.size.width * 0.7;
+}
+
+@end
+
 @interface ViewController ()
 
 @end
@@ -40,6 +158,8 @@
     self.chatTableView.delegate = self;
     self.chatTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.chatTableView.backgroundColor = [UIColor whiteColor];
+    self.chatTableView.estimatedRowHeight = 60;
+    self.chatTableView.rowHeight = UITableViewAutomaticDimension;
     [self.view addSubview:self.chatTableView];
     
     // 创建底部输入区域
@@ -96,8 +216,8 @@
         [self.sendButton.heightAnchor constraintEqualToConstant:40]
     ]];
     
-    // 注册单元格
-    [self.chatTableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"MessageCell"];
+    // 注册自定义单元格
+    [self.chatTableView registerClass:[MessageCell class] forCellReuseIdentifier:@"MessageCell"];
 }
 
 - (void)registerLocalTools {
@@ -228,68 +348,16 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCell" forIndexPath:indexPath];
-    
-    // 配置单元格
+    MessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MessageCell" forIndexPath:indexPath];
     MessageModel *message = self.messages[indexPath.row];
-    
-    // 创建气泡视图
-    UIView *bubbleView = [[UIView alloc] init];
-    bubbleView.layer.cornerRadius = 12;
-    bubbleView.clipsToBounds = YES;
-    
-    // 创建消息标签
-    UILabel *messageLabel = [[UILabel alloc] init];
-    messageLabel.text = message.content;
-    messageLabel.numberOfLines = 0;
-    messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    
-    // 根据消息类型设置样式
-    if (message.type == MessageTypeUser) {
-        bubbleView.backgroundColor = [UIColor systemBlueColor];
-        messageLabel.textColor = [UIColor whiteColor];
-        // 用户消息靠右
-        bubbleView.frame = CGRectMake(cell.contentView.bounds.size.width - 260, 10, 250, 0);
-    } else {
-        bubbleView.backgroundColor = [UIColor systemGrayColor];
-        messageLabel.textColor = [UIColor whiteColor];
-        // 模型消息靠左
-        bubbleView.frame = CGRectMake(10, 10, 250, 0);
-    }
-    
-    // 设置消息标签的大小和位置
-    messageLabel.frame = CGRectMake(10, 10, 230, 0);
-    [messageLabel sizeToFit];
-    
-    // 调整气泡视图的高度
-    CGRect bubbleFrame = bubbleView.frame;
-    bubbleFrame.size.height = messageLabel.frame.size.height + 20;
-    bubbleView.frame = bubbleFrame;
-    
-    // 添加到单元格
-    [bubbleView addSubview:messageLabel];
-    [cell.contentView addSubview:bubbleView];
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+    [cell configureWithMessage:message];
     return cell;
 }
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    // 动态计算单元格高度
-    MessageModel *message = self.messages[indexPath.row];
-    
-    // 创建临时标签计算高度
-    UILabel *tempLabel = [[UILabel alloc] init];
-    tempLabel.text = message.content;
-    tempLabel.numberOfLines = 0;
-    tempLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    tempLabel.frame = CGRectMake(0, 0, 230, CGFLOAT_MAX);
-    [tempLabel sizeToFit];
-    
-    return tempLabel.frame.size.height + 40; // 额外空间用于边距
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - UITextFieldDelegate

@@ -1,0 +1,15 @@
+# Xcode build artifacts
+build/
+DerivedData/
+
+# Xcode user interface and state files
+*.xcuserstate
+project.xcworkspace
+UserInterfaceState.xcuserstate
+project.xcworkspace/
+*.xcbkptlist
+xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+
