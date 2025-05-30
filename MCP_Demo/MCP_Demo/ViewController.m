@@ -126,7 +126,7 @@
 @end
 
 @interface ViewController ()
-
+@property (nonatomic, strong) NSLayoutConstraint *inputContainerBottomConstraint;  // 添加底部约束属性
 @end
 
 @implementation ViewController
@@ -147,6 +147,69 @@
     
     // 设置UI
     [self setupUI];
+    
+    // 注册键盘通知
+    [self registerForKeyboardNotifications];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    // 移除键盘通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)registerForKeyboardNotifications {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(keyboardWillShow:)
+                                               name:UIKeyboardWillShowNotification
+                                             object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                           selector:@selector(keyboardWillHide:)
+                                               name:UIKeyboardWillHideNotification
+                                             object:nil];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    // 获取键盘高度
+    CGRect keyboardFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGFloat keyboardHeight = keyboardFrame.size.height;
+    
+    // 获取动画时长
+    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    // 更新输入框底部约束
+    self.inputContainerBottomConstraint.constant = -keyboardHeight;
+    
+    // 使用键盘动画时长执行动画
+    [UIView animateWithDuration:duration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+    
+    // 滚动到最新消息
+    [self scrollToBottomAnimated:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    // 获取动画时长
+    NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    // 恢复输入框位置
+    self.inputContainerBottomConstraint.constant = 0;
+    
+    // 使用键盘动画时长执行动画
+    [UIView animateWithDuration:duration animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+- (void)scrollToBottomAnimated:(BOOL)animated {
+    if (self.messages.count > 0) {
+        NSIndexPath *lastIndexPath = [NSIndexPath indexPathForRow:self.messages.count - 1 inSection:0];
+        [self.chatTableView scrollToRowAtIndexPath:lastIndexPath
+                                 atScrollPosition:UITableViewScrollPositionBottom
+                                         animated:animated];
+    }
 }
 
 - (void)setupUI {
@@ -181,17 +244,18 @@
     [self.sendButton addTarget:self action:@selector(sendMessage) forControlEvents:UIControlEventTouchUpInside];
     [inputContainerView addSubview:self.sendButton];
     
-    // 设置约束（使用手动布局）
+    // 设置约束（使用自动布局）
     inputContainerView.translatesAutoresizingMaskIntoConstraints = NO;
     self.chatTableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.inputTextField.translatesAutoresizingMaskIntoConstraints = NO;
     self.sendButton.translatesAutoresizingMaskIntoConstraints = NO;
     
     // 输入容器约束
+    self.inputContainerBottomConstraint = [inputContainerView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor];
     [NSLayoutConstraint activateConstraints:@[
         [inputContainerView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
         [inputContainerView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-        [inputContainerView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+        self.inputContainerBottomConstraint,
         [inputContainerView.heightAnchor constraintEqualToConstant:60]
     ]];
     
@@ -305,6 +369,8 @@
     // 清空输入框
     self.inputTextField.text = @"";
     
+//    [self scrollToBottomAnimated:YES];
+    
     // 刷新界面
     [self.chatTableView reloadData];
     
@@ -317,6 +383,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.messages addObject:message];
         [self.chatTableView reloadData];
+        [self scrollToBottomAnimated:YES];  // 收到新消息时滚动到底部
     });
 }
 
@@ -362,9 +429,15 @@
 
 #pragma mark - UITextFieldDelegate
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    // 开始编辑时滚动到最新消息
+    [self scrollToBottomAnimated:YES];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField == self.inputTextField) {
         [self sendMessage];
+        [textField resignFirstResponder];  // 发送后收起键盘
         return YES;
     }
     return NO;
