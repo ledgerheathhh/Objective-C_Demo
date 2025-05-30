@@ -18,6 +18,6 @@
 @property (nonatomic, strong) UITableView *chatTableView;
 @property (nonatomic, strong) UITextField *inputTextField;
 @property (nonatomic, strong) UIButton *sendButton;
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator; // 添加活动指示器
 
 @end
-

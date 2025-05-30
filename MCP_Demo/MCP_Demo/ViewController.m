@@ -47,12 +47,12 @@
         // 设置最大宽度约束（屏幕宽度的70%）
         CGFloat maxWidth = UIScreen.mainScreen.bounds.size.width * 0.7;
         self.bubbleWidthConstraint = [self.bubbleView.widthAnchor constraintLessThanOrEqualToConstant:maxWidth];
+        self.bubbleWidthConstraint.active = NO; // 初始不激活
         
         [NSLayoutConstraint activateConstraints:@[
             // 气泡视图约束
             self.bubbleLeadingConstraint,
             self.bubbleTrailingConstraint,
-            self.bubbleWidthConstraint,
             [self.bubbleView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:10],
             [self.bubbleView.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-10],
             
@@ -69,6 +69,9 @@
 - (void)configureWithMessage:(MessageModel *)message {
     self.messageLabel.text = message.content;
     
+    // 确保宽度约束处于非激活状态，以便重新设置 constant
+    self.bubbleWidthConstraint.active = NO;
+
     // 根据消息类型设置样式
     if (message.type == MessageTypeUser) {
         self.bubbleView.backgroundColor = [UIColor systemBlueColor];
@@ -79,9 +82,6 @@
         self.bubbleTrailingConstraint.active = YES;
         self.bubbleTrailingConstraint.constant = -10;
         
-        // 设置最小宽度约束，确保短消息也有合适的宽度
-        CGFloat minWidth = MIN(UIScreen.mainScreen.bounds.size.width * 0.3, 100);
-        [self.bubbleView.widthAnchor constraintGreaterThanOrEqualToConstant:minWidth].active = YES;
     } else {
         self.bubbleView.backgroundColor = [UIColor systemGrayColor];
         self.messageLabel.textColor = [UIColor whiteColor];
@@ -90,25 +90,31 @@
         self.bubbleTrailingConstraint.active = NO;
         self.bubbleLeadingConstraint.active = YES;
         self.bubbleLeadingConstraint.constant = 10;
-        
-        // 设置最小宽度约束，确保短消息也有合适的宽度
-        CGFloat minWidth = MIN(UIScreen.mainScreen.bounds.size.width * 0.3, 100);
-        [self.bubbleView.widthAnchor constraintGreaterThanOrEqualToConstant:minWidth].active = YES;
     }
     
-    // 强制布局更新以获取正确的文本大小
-    [self.messageLabel setNeedsLayout];
-    [self.messageLabel layoutIfNeeded];
-    
     // 根据文本内容调整气泡宽度
-    CGSize textSize = [self.messageLabel.text boundingRectWithSize:CGSizeMake(UIScreen.mainScreen.bounds.size.width * 0.7 - 20, CGFLOAT_MAX)
+    // 计算文本的实际大小
+    CGFloat maxTextWidth = UIScreen.mainScreen.bounds.size.width * 0.7 - 20; // 气泡最大宽度 - 左右内边距
+    CGSize constrainedSize = CGSizeMake(maxTextWidth, CGFLOAT_MAX);
+    CGSize textSize = [self.messageLabel.text boundingRectWithSize:constrainedSize
                                                          options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
                                                       attributes:@{NSFontAttributeName: self.messageLabel.font}
                                                          context:nil].size;
     
-    // 设置气泡宽度约束
-    CGFloat bubbleWidth = MIN(textSize.width + 20, UIScreen.mainScreen.bounds.size.width * 0.7);
-    self.bubbleWidthConstraint.constant = bubbleWidth;
+    // 气泡的最小宽度，确保短消息也有合适的宽度
+    CGFloat minBubbleWidth = MIN(UIScreen.mainScreen.bounds.size.width * 0.3, 100);
+    // 气泡的实际宽度，加上左右内边距
+    CGFloat calculatedBubbleWidth = MAX(textSize.width + 20, minBubbleWidth);
+    // 气泡的最终宽度，不超过最大宽度
+    CGFloat finalBubbleWidth = MIN(calculatedBubbleWidth, UIScreen.mainScreen.bounds.size.width * 0.7);
+
+    // 设置宽度约束的 constant 并激活
+    self.bubbleWidthConstraint.constant = finalBubbleWidth;
+    self.bubbleWidthConstraint.active = YES;
+    
+    // 强制布局更新以获取正确的文本大小
+    [self.messageLabel setNeedsLayout];
+    [self.messageLabel layoutIfNeeded];
 }
 
 - (void)prepareForReuse {
@@ -117,10 +123,10 @@
     self.bubbleView.backgroundColor = nil;
     self.messageLabel.textColor = nil;
     
-    // 重置约束
+    // 重置约束的激活状态
     self.bubbleLeadingConstraint.active = YES;
     self.bubbleTrailingConstraint.active = YES;
-    self.bubbleWidthConstraint.constant = UIScreen.mainScreen.bounds.size.width * 0.7;
+    self.bubbleWidthConstraint.active = NO; // 禁用宽度约束，以便在 configureWithMessage 中重新设置
 }
 
 @end
@@ -135,7 +141,7 @@
     [super viewDidLoad];
     
     // 初始化组件
-    self.mcpClient = [[MCPClient alloc] initWithAPIKey:@""
+    self.mcpClient = [[MCPClient alloc] initWithAPIKey:@"935eb822-582f-44ea-bba6-ccef3eef1b04"
                                                baseURL:@"https://api-inference.modelscope.cn/v1/chat/completions"];
     self.mcpClient.delegate = self;
     
@@ -243,6 +249,12 @@
     [self.sendButton setTitle:@"发送" forState:UIControlStateNormal];
     [self.sendButton addTarget:self action:@selector(sendMessage) forControlEvents:UIControlEventTouchUpInside];
     [inputContainerView addSubview:self.sendButton];
+
+    // 创建活动指示器
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+    self.activityIndicator.hidesWhenStopped = YES;
+    self.activityIndicator.translatesAutoresizingMaskIntoConstraints = NO;
+    [inputContainerView addSubview:self.activityIndicator];
     
     // 设置约束（使用自动布局）
     inputContainerView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -279,6 +291,12 @@
         [self.sendButton.widthAnchor constraintEqualToConstant:60],
         [self.sendButton.heightAnchor constraintEqualToConstant:40]
     ]];
+
+    // 活动指示器约束
+    [NSLayoutConstraint activateConstraints:@[
+        [self.activityIndicator.trailingAnchor constraintEqualToAnchor:self.sendButton.leadingAnchor constant:-10],
+        [self.activityIndicator.centerYAnchor constraintEqualToAnchor:inputContainerView.centerYAnchor]
+    ]];
     
     // 注册自定义单元格
     [self.chatTableView registerClass:[MessageCell class] forCellReuseIdentifier:@"MessageCell"];
@@ -286,8 +304,8 @@
 
 - (void)registerLocalTools {
     // 注册获取当前时间工具
-    [self.toolManager registerTool:@"get_current_time" 
-                        description:@"获取当前系统时间" 
+    [self.toolManager registerTool:@"get_current_time"
+                        description:@"获取当前系统时间"
                             handler:^(NSDictionary *params, ToolCompletionBlock completion) {
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
@@ -296,8 +314,8 @@
     }];
     
     // 注册计算器工具
-    [self.toolManager registerTool:@"calculator" 
-                        description:@"执行基本数学计算" 
+    [self.toolManager registerTool:@"calculator"
+                        description:@"执行基本数学计算"
                             handler:^(NSDictionary *params, ToolCompletionBlock completion) {
         NSString *expression = params[@"expression"];
         // 简单的计算逻辑
@@ -307,8 +325,8 @@
     }];
     
     // 注册获取设备信息工具
-    [self.toolManager registerTool:@"get_device_info" 
-                        description:@"获取设备信息" 
+    [self.toolManager registerTool:@"get_device_info"
+                        description:@"获取设备信息"
                             handler:^(NSDictionary *params, ToolCompletionBlock completion) {
         UIDevice *device = [UIDevice currentDevice];
         NSDictionary *deviceInfo = @{
@@ -321,8 +339,8 @@
     }];
     
     // 注册获取电池信息工具
-    [self.toolManager registerTool:@"get_battery_info" 
-                        description:@"获取电池信息" 
+    [self.toolManager registerTool:@"get_battery_info"
+                        description:@"获取电池信息"
                             handler:^(NSDictionary *params, ToolCompletionBlock completion) {
         UIDevice *device = [UIDevice currentDevice];
         device.batteryMonitoringEnabled = YES;
@@ -369,10 +387,14 @@
     // 清空输入框
     self.inputTextField.text = @"";
     
-//    [self scrollToBottomAnimated:YES];
+    // 禁用输入框和发送按钮，显示活动指示器
+    self.inputTextField.enabled = NO;
+    self.sendButton.enabled = NO;
+    [self.activityIndicator startAnimating];
     
     // 刷新界面
     [self.chatTableView reloadData];
+    [self scrollToBottomAnimated:YES];
     
     // 发送到MCP客户端
     [self.mcpClient sendMessage:userMessage withTools:[self.toolManager getAvailableTools]];
@@ -384,26 +406,53 @@
         [self.messages addObject:message];
         [self.chatTableView reloadData];
         [self scrollToBottomAnimated:YES];  // 收到新消息时滚动到底部
+        
+        // 启用输入框和发送按钮，隐藏活动指示器
+        self.inputTextField.enabled = YES;
+        self.sendButton.enabled = YES;
+        [self.activityIndicator stopAnimating];
     });
 }
 
 - (void)didReceiveToolCall:(NSString *)toolName params:(NSDictionary *)params {
+    // 显示工具调用消息
+    MessageModel *toolCallMsg = [[MessageModel alloc] init];
+    toolCallMsg.content = [NSString stringWithFormat:@"正在调用工具: %@...", toolName];
+    toolCallMsg.type = MessageTypeTool;
+    toolCallMsg.timestamp = [NSDate date];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.messages addObject:toolCallMsg];
+        [self.chatTableView reloadData];
+        [self scrollToBottomAnimated:YES];
+    });
+
     [self.toolManager executeTool:toolName withParams:params completion:^(id result, NSError *error) {
         if (error) {
             [self.mcpClient sendToolResult:toolName result:@{@"error": error.localizedDescription}];
         } else {
             [self.mcpClient sendToolResult:toolName result:result];
         }
+        // 工具执行完成后，重新启用输入框和发送按钮，隐藏活动指示器
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.inputTextField.enabled = YES;
+            self.sendButton.enabled = YES;
+            [self.activityIndicator stopAnimating];
+        });
     }];
 }
 
 - (void)didEncounterError:(NSError *)error {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"错误" 
-                                                                       message:error.localizedDescription 
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"错误"
+                                                                       message:error.localizedDescription
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil]];
         [self presentViewController:alert animated:YES completion:nil];
+        
+        // 启用输入框和发送按钮，隐藏活动指示器
+        self.inputTextField.enabled = YES;
+        self.sendButton.enabled = YES;
+        [self.activityIndicator stopAnimating];
     });
 }
 
