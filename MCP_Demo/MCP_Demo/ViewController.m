@@ -156,12 +156,35 @@
     
     // 注册键盘通知
     [self registerForKeyboardNotifications];
+    
+    // 添加手势识别器以在点击空白处时收起键盘
+    [self setupTapToDismissKeyboard];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     // 移除键盘通知
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)setupTapToDismissKeyboard {
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]
+                                          initWithTarget:self
+                                          action:@selector(dismissKeyboard:)];
+    // 设置为NO，这样点击UITableViewCell等不会触发dismissKeyboard
+    // 如果你希望点击到 TableView Cell 也收起键盘，则可以不设置或设为 YES，
+    // 但通常不希望这样，因为用户可能想滚动 TableView。
+//    tapGesture.cancelsTouchesInView = NO;
+    [self.view addGestureRecognizer:tapGesture];
+}
+
+// 手势触发的方法
+- (void)dismissKeyboard:(UITapGestureRecognizer *)sender {
+    // 让当前视图中任何持有第一响应者状态的控件都放弃它
+    // 通常，这意味着让 self.inputTextField 失焦
+//     [self.view endEditing:YES];
+    // 或者，如果你明确知道是哪个输入框：
+     [self.inputTextField resignFirstResponder];
 }
 
 - (void)registerForKeyboardNotifications {
@@ -184,8 +207,13 @@
     // 获取动画时长
     NSTimeInterval duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
+    CGFloat bottomSafeAreaHeight = 0;
+    if (@available(iOS 11.0, *)) {
+        bottomSafeAreaHeight = self.view.safeAreaInsets.bottom;
+    }
+    
     // 更新输入框底部约束
-    self.inputContainerBottomConstraint.constant = -keyboardHeight;
+    self.inputContainerBottomConstraint.constant = -keyboardHeight + bottomSafeAreaHeight;
     
     // 使用键盘动画时长执行动画
     [UIView animateWithDuration:duration animations:^{
@@ -391,6 +419,7 @@
     self.inputTextField.enabled = NO;
     self.sendButton.enabled = NO;
     [self.activityIndicator startAnimating];
+    [self.inputTextField resignFirstResponder];
     
     // 刷新界面
     [self.chatTableView reloadData];
