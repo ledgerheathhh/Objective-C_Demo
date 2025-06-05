@@ -141,7 +141,7 @@
     [super viewDidLoad];
     
     // 初始化组件
-    self.mcpClient = [[MCPClient alloc] initWithAPIKey:@"935eb822-582f-44ea-bba6-ccef3eef1b04"
+    self.mcpClient = [[MCPClient alloc] initWithAPIKey:@""
                                                baseURL:@"https://api-inference.modelscope.cn/v1/chat/completions"];
     self.mcpClient.delegate = self;
     
@@ -399,6 +399,19 @@
         device.batteryMonitoringEnabled = NO;
         completion(batteryInfo, nil);
     }];
+    
+    // 注册屏幕截图工具
+    [self.toolManager registerTool:@"take_screenshot"
+                        description:@"截取当前屏幕内容并返回Base64编码的图片数据"
+                            handler:^(NSDictionary *params, ToolCompletionBlock completion) {
+        [self takeScreenshotWithCompletion:^(NSString *base64Image, NSError *error) {
+            if (error) {
+                completion(nil, error);
+            } else {
+                completion(base64Image, nil);
+            }
+        }];
+    }];
 }
 
 - (void)sendMessage {
@@ -519,6 +532,94 @@
         return YES;
     }
     return NO;
+}
+
+#pragma mark - Screenshot Tool
+
+- (void)takeScreenshotWithCompletion:(void(^)(NSString *base64Image, NSError *error))completion {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIWindow *targetWindow = nil;
+        // 寻找当前活动场景中的主窗口 (iOS 13.0 及更高版本)
+        if (@available(iOS 13.0, *)) {
+            for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+                if (scene.activationState == UISceneActivationStateForegroundActive && [scene isKindOfClass:[UIWindowScene class]]) {
+                    UIWindowScene *windowScene = (UIWindowScene *)scene;
+                    // 寻找当前场景中的主窗口
+                    for (UIWindow *window in windowScene.windows) {
+                        if (window.isKeyWindow) { // 优先使用keyWindow，但这里是场景内的keyWindow
+                            targetWindow = window;
+                            break;
+                        }
+                    }
+                    // 如果没有keyWindow，则使用第一个窗口
+                    if (!targetWindow && windowScene.windows.count > 0) {
+                        targetWindow = windowScene.windows.firstObject;
+                    }
+                }
+                if (targetWindow) break;
+            }
+        } else {
+            // 对于iOS 13以下版本，直接返回错误，因为此工具需要iOS 13.0或更高版本
+            if (completion) {
+                NSError *error = [NSError errorWithDomain:@"ScreenshotErrorDomain"
+                                                     code:500
+                                                 userInfo:@{NSLocalizedDescriptionKey: @"Screenshot tool requires iOS 13.0 or later."}];
+                completion(nil, error);
+            }
+            return;
+        }
+
+        if (!targetWindow) {
+            if (completion) {
+                NSError *error = [NSError errorWithDomain:@"ScreenshotErrorDomain"
+                                                     code:500
+                                                 userInfo:@{NSLocalizedDescriptionKey: @"No active window found for screenshot."}];
+                completion(nil, error);
+            }
+            return;
+        }
+
+        UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithBounds:targetWindow.bounds];
+        UIImage *image = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+            [targetWindow drawViewHierarchyInRect:targetWindow.bounds afterScreenUpdates:YES];
+        }];
+
+        // 尝试使用JPEG压缩，降低质量以减小数据大小
+        NSData *imageData = UIImageJPEGRepresentation(image, 0.5); // 0.5 表示中等质量
+        if (!imageData) {
+            if (completion) {
+                NSError *error = [NSError errorWithDomain:@"ScreenshotErrorDomain"
+                                                     code:500
+                                                 userInfo:@{NSLocalizedDescriptionKey: @"Failed to convert image to JPEG data."}];
+                completion(nil, error);
+            }
+            return;
+        }
+        
+        // 检查图片数据大小，如果仍然过大，可以进一步处理
+        // 57344 是目标API允许的最大长度
+        if (imageData.length > 57344) {
+            // 如果仍然太大，可以尝试进一步降低质量或缩小图片尺寸
+            // 这里我们先尝试降低到0.3
+            imageData = UIImageJPEGRepresentation(image, 0.1);
+            if (imageData.length > 57344) {
+                // 如果仍然太大，可以考虑缩小图片尺寸
+                // 为了简化，这里直接返回错误，实际应用中可能需要更复杂的缩放逻辑
+                if (completion) {
+                    NSError *error = [NSError errorWithDomain:@"ScreenshotErrorDomain"
+                                                         code:500
+                                                     userInfo:@{NSLocalizedDescriptionKey: @"Screenshot data still too large after compression."}];
+                    completion(nil, error);
+                }
+                return;
+            }
+        }
+
+        NSString *base64String = [imageData base64EncodedStringWithOptions:0];
+        if (completion) {
+            completion(base64String, nil);
+        }
+    });
 }
 
 @end

@@ -20,4 +20,6 @@
 @property (nonatomic, strong) UIButton *sendButton;
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator; // 添加活动指示器
 
+- (void)takeScreenshotWithCompletion:(void(^)(NSString *base64Image, NSError *error))completion;
+
 @end
